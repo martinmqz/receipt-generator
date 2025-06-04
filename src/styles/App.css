@@ -1,10 +1,10 @@
 #root {
-  display: grid;
+  /* display: grid;
   grid-template-areas:
     "header header"
     "main main"
     "footer footer";
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto; */
   max-width: 1280px;
   height: 100dvh;
   margin: 0 auto;
@@ -23,6 +23,7 @@ main {
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr;
   gap: 6rem;
+  align-items: start;
 }
 
 footer {
@@ -41,6 +42,8 @@ footer {
 
 #receipt-section {
   grid-area: receipt;
+  position: sticky;
+  top: 0;
 }
 
 .spinner {
@@ -75,11 +78,39 @@ footer {
   }
 }
 
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  padding: 1rem;
 
+  span {
+    display: inline-block;
+    padding: 0 0 0.5rem 0.5rem
+  }
+}
 
+.cart-total {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
 
+.print-button {
+  width: 100%;
 
+}
 
+.chart-container {
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  main {
+    grid-template-areas: 
+    "items items"
+      "receipt receipt";
+  }
+}
 
 
 .logo {

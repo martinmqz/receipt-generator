@@ -1,14 +1,16 @@
 import React from 'react'
 import Products from './components/products'
 import type Product from './models/IProduct'
-import { EmptyState, VStack, ProgressCircle, Input, InputGroup, CloseButton } from '@chakra-ui/react'
-import { LuShoppingCart } from 'react-icons/lu'
-
-import viteLogo from '/vite.svg'
-import './App.css'
+import { EmptyState, VStack, ProgressCircle, Input, InputGroup, CloseButton, HStack, Button } from '@chakra-ui/react'
+import { Chart, useChart } from '@chakra-ui/charts'
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts'
+import { LuShoppingCart, LuPrinter } from 'react-icons/lu'
 import Config from './utils/config'
 import Cart from './models/Cart'
 import Cache from './utils/cache'
+import viteLogo from '/vite.svg'
+import './styles/App.css'
+import './styles/print.css'
 
 function App() {
   const [loading, setLoading] = React.useState(true)
@@ -25,6 +27,10 @@ function App() {
       }}
     />
   ) : undefined
+  
+  const chart = useChart<{ quantity: number; category: string }>({
+      data: getChartData(cartItems)
+    })
 
   React.useEffect(() => {
     fetchProducts()
@@ -93,9 +99,9 @@ function App() {
                   <LuShoppingCart />
                 </EmptyState.Indicator>
                 <VStack textAlign="center">
-                  <EmptyState.Title>Your cart is empty</EmptyState.Title>
+                  <EmptyState.Title>Your receipt is empty</EmptyState.Title>
                   <EmptyState.Description>
-                    Explore our products and add items to your cart
+                    Explore our products and add items to your receipt
                   </EmptyState.Description>
                 </VStack>
               </EmptyState.Content>
@@ -104,6 +110,34 @@ function App() {
           <div className="cart">
             <div className="cart-items">{renderCartItems(cartItems)}</div>
             <div className="cart-summary">{cartItems.length > 0 && renderCartSummary(cartItems)}</div>
+            { cartItems.length > 0 && (
+            <HStack>
+              <Button className='print-button' onClick={() => window.print()}>
+                <LuPrinter />
+                Print Receipt
+              </Button>
+            </HStack>
+            )}
+            { cartItems.length > 0 && (
+            <Chart.Root maxH="sm" chart={chart} className="chart-container">
+              <BarChart data={chart.data}>
+                <CartesianGrid stroke={chart.color('border.muted')} vertical={false} />
+                <XAxis axisLine={false} tickLine={false} dataKey={chart.key('category')} />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  // domain={[0, 10]}
+                  tickFormatter={(value) => `${value}`}
+                />
+                <Bar isAnimationActive={true} dataKey={chart.key('quantity')}>
+                  {chart.data.map((item) => (
+                    <Cell key={item.category} fill={chart.color(item.color)} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </Chart.Root>
+            )}
+
           </div>
         </section>
       </main>
@@ -159,18 +193,21 @@ function renderCartSummary(cartItems: Product[]) {
   return (
     <>
       <div className="cart-subtotal">
-        <span>Subtotal:</span>
+        <span>Subtotal: </span>
         <span>${subtotal}</span>
       </div>
       <div className="cart-taxes">
         <div className="cart-taxes__state">
-          <span>State tax (6.3%): {stateTaxTotal}</span>
+          <span>State tax (6.3%): </span>
+          <span>${stateTaxTotal}</span>
         </div>
         <div className="cart-taxes__county">
-          <span>County tax (0.7%): {countyTaxTotal}</span>
+          <span>County tax (0.7%): </span>
+          <span>${countyTaxTotal}</span>
         </div>
         <div className="cart-taxes__city">
-          <span>City tax (2.0%): {cityTaxTotal}</span>
+          <span>City tax (2.0%): </span>
+          <span>${cityTaxTotal}</span>
         </div>
       </div>
       <div className="cart-total">
@@ -193,6 +230,21 @@ async function fetchProducts() {
     console.error('Failed to fetch products:', error)
     throw error
   }
+}
+
+function countItemsByCategory(products: Product[], category: string): number {
+  return products.filter(product => product.category === category).length
+}
+
+function getChartData(items: Product[]) {
+  return  [
+    { quantity: countItemsByCategory(items, 'g'), category: 'Grocery', color: 'red.solid' },
+    { quantity: countItemsByCategory(items, 'pf'), category: 'Prep. food', color: 'blue.solid' },
+    { quantity: countItemsByCategory(items, 'pd'), category: 'Presc. drug', color: 'green.solid' },
+    { quantity: countItemsByCategory(items, 'nd'), category: 'NP drug', color: 'yellow.solid' },
+    { quantity: countItemsByCategory(items, 'c'), category: 'Clothing', color: 'teal.solid' },
+    { quantity: countItemsByCategory(items, 'o'), category: 'Other', color: 'purple.solid' }
+  ]
 }
 
 export default App
