@@ -7,7 +7,6 @@ import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts'
 import { LuShoppingCart, LuPrinter, LuMoon, LuSun } from 'react-icons/lu'
 import { useColorMode } from './components/ui/color-mode'
 import Cache from './utils/cache'
-import viteLogo from '/vite.svg'
 import './styles/App.css'
 import './styles/print.css'
 import fetchProducts from './utils/fetch-products'
@@ -64,7 +63,7 @@ function App() {
   return (
     <>
       <header>
-        <img src={viteLogo} alt="logo" />
+        <img src='./vite.svg' alt="logo" />
         <h1>MM Receipt Generator</h1>
         <Text textStyle='xs' className='no-print'>Toggle Mode</Text>
         <IconButton onClick={toggleColorMode} variant="outline" size="sm" className='no-print'>
