@@ -1,26 +1,36 @@
-// import { Button, HStack } from '@chakra-ui/react'
 import React from 'react'
 import Products from './components/products'
 import type Product from './models/IProduct'
-import { EmptyState, VStack, ProgressCircle } from '@chakra-ui/react'
+import { EmptyState, VStack, ProgressCircle, Input, InputGroup, CloseButton } from '@chakra-ui/react'
 import { LuShoppingCart } from 'react-icons/lu'
 
 import viteLogo from '/vite.svg'
 import './App.css'
 import Config from './utils/config'
 import Cart from './models/Cart'
-// import Cache from './utils/cache'
+import Cache from './utils/cache'
 
 function App() {
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<Error | null>(null)
-  const [products, setProducts] = React.useState<Product[]>([])
+  const [products, setProducts] = React.useState<Product[]>(Cache.products)
   const [cartItems, setCartItems] = React.useState<Product[]>([])
+  const [searchKeyword, setSearchKeyword] = React.useState('')
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const endElement = searchKeyword ? (
+    <CloseButton
+      onClick={() => {
+        setSearchKeyword('')
+        inputRef.current?.focus()
+      }}
+    />
+  ) : undefined
 
   React.useEffect(() => {
     fetchProducts()
       .then((data) => {
-        setProducts(data)
+        Cache.products = data
+        setProducts(Cache.products)
         setLoading(false)
       })
       .catch((err) => {
@@ -28,6 +38,18 @@ function App() {
         setLoading(false)
       })
   }, [])
+
+  React.useEffect(() => {
+    if (searchKeyword) {
+      const filteredProducts = Cache.products.filter(product =>
+        product.name.toUpperCase().includes(searchKeyword.toUpperCase())
+      )
+      setProducts(filteredProducts)
+    } 
+    else {
+      setProducts(Cache.products)
+    }
+  }, [searchKeyword])
 
   return (
     <>
@@ -37,7 +59,16 @@ function App() {
       </header>
       <main>
         <section id="items-section">
-          
+          <InputGroup endElement={endElement}>
+            <Input
+              ref={inputRef}
+              placeholder="Search products"
+              value={searchKeyword}
+              onChange={(e) => {
+                setSearchKeyword(e.currentTarget.value)
+              }}
+            />
+          </InputGroup>
           <h2>Products</h2>
           {
             loading && !error && 
@@ -50,7 +81,7 @@ function App() {
           }
           {
             !loading && !error &&
-            <Products data={products} selectionChange={updateItemInCart} />
+            <Products data={products} selectionChange={updateItemInCart} selectedProducts={cartItems} />
           }
         </section>
         <section id="receipt-section">
@@ -83,6 +114,7 @@ function App() {
   /**
    * Handles adding or removing a product from the cart
    * @param product The product being added or removed.
+   * @param wasAdded True if the product was selected, false if it was unselected.
    */
   function updateItemInCart(product: Product, wasAdded: boolean) {
     if (wasAdded) {
@@ -105,7 +137,6 @@ function App() {
   }
 } // end App()
 
-
 function renderCartItems(cartItems: Product[]) {
   return cartItems.map((item) => (
     <div key={item.id} className="cart-item">
@@ -116,7 +147,6 @@ function renderCartItems(cartItems: Product[]) {
     </div>
   ))
 }
-
 function renderCartSummary(cartItems: Product[]) {
   const cart = new Cart(cartItems)
   const subtotal = cart.getSubtotal().toFixed(2)

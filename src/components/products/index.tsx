@@ -5,9 +5,10 @@ import { CheckboxCard, Stack } from '@chakra-ui/react'
 interface ProductsProps {
   data: Product[];
   selectionChange?: (item: Product, checked: boolean) => void;
+  selectedProducts?: Product[];
 }
 
-export default function Products({ data, selectionChange }: ProductsProps) {
+export default function Products({ data, selectionChange, selectedProducts }: Readonly<ProductsProps>) {
   return (
     <Stack>{
       data.map((item) => (
@@ -15,6 +16,7 @@ export default function Products({ data, selectionChange }: ProductsProps) {
           data-price={item.price}
           data-category={item.category}
           onChange={(e) => selectionChange?.(item, (e.target as HTMLInputElement).checked)}
+          defaultChecked={selectedProducts?.find((product) => product.id === item.id) !== undefined}
         >
           <CheckboxCard.HiddenInput />
           <CheckboxCard.Control>
