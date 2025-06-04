@@ -1,0 +1,11 @@
+
+@media print {
+
+  .no-print {
+    display: none;
+  }
+
+  main {
+    grid-template-areas: "receipt receipt";  
+  }  
+}

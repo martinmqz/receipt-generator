@@ -1,0 +1,74 @@
+[
+  {
+    "id": "017082112774",
+    "name": "JK LNK BEEF TERI",
+    "price": 5.99,
+    "category": "g"
+  },
+  {
+    "id": "018200530470",
+    "name": "BUD LT 12 CAN",
+    "price": 11.99,
+    "category": "o"
+  },
+  {
+    "id": "028400157827",
+    "name": "CHEETOS CHED JAL",
+    "price": 3.99,
+    "category": "g"
+  },
+  {
+    "id": "028400589864",
+    "name": "CHEETOS CRUNCHY",
+    "price": 3.99,
+    "category": "g"
+  },
+  {
+    "id": "080660956756",
+    "name": "CORONA LT 12 BTL",
+    "price": 12.99,
+    "category": "o"
+  },
+  {
+    "id": "305730133203",
+    "name": "ADVIL IBU 20CT",
+    "price": 7.99,
+    "category": "nd"
+  },
+  {
+    "id": "051000199447",
+    "name": "CAMPBELL GO COCO",
+    "price": 4.69,
+    "category": "g"
+  },
+  {
+    "id": "051000058874",
+    "name": "CAMPBELL HLTH TOM",
+    "price": 2.49,
+    "category": "g"
+  },
+  {
+    "id": "051000195654",
+    "name": "CAMPBELL HOME SW",
+    "price": 3.99,
+    "category": "g"
+  },
+  {
+    "id": "305732450421",
+    "name": "NEXIUM 24H ACID",
+    "price": 8.99,
+    "category": "nd"
+  },
+  {
+    "id": "305730184328",
+    "name": "ADVIL COLD SINUS",
+    "price": 6.99,
+    "category": "nd"
+  },
+  {
+    "id": "305730179201",
+    "name": "ADVIL JR IBUPROF",
+    "price": 4.99,
+    "category": "nd"
+  }
+]
