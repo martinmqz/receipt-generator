@@ -1,5 +1,9 @@
 import type Product from './IProduct'
 
+/**
+ * Cart model to manage items in a shopping cart.
+ * It calculates subtotal, tax totals, and total amount due based on the items in the cart.
+ */
 export default class Cart {
   private items: Product[]
   private subtotal = 0

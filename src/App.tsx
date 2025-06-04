@@ -1,16 +1,19 @@
 import React from 'react'
 import Products from './components/products'
 import type Product from './models/IProduct'
-import { EmptyState, VStack, ProgressCircle, Input, InputGroup, CloseButton, HStack, Button } from '@chakra-ui/react'
+import { EmptyState, VStack, Input, InputGroup, CloseButton, HStack, Button, Skeleton, Text, Stack, IconButton, For } from '@chakra-ui/react'
 import { Chart, useChart } from '@chakra-ui/charts'
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts'
-import { LuShoppingCart, LuPrinter } from 'react-icons/lu'
-import Config from './utils/config'
-import Cart from './models/Cart'
+import { LuShoppingCart, LuPrinter, LuMoon, LuSun } from 'react-icons/lu'
+import { useColorMode } from './components/ui/color-mode'
 import Cache from './utils/cache'
 import viteLogo from '/vite.svg'
 import './styles/App.css'
 import './styles/print.css'
+import fetchProducts from './utils/fetch-products'
+import renderCartItems from './utils/render-cart-items'
+import renderCartSummary from './utils/render-cart-summary'
+import getChartData from './utils/get-chart-data'
 
 function App() {
   const [loading, setLoading] = React.useState(true)
@@ -19,6 +22,7 @@ function App() {
   const [cartItems, setCartItems] = React.useState<Product[]>([])
   const [searchKeyword, setSearchKeyword] = React.useState('')
   const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const { toggleColorMode, colorMode } = useColorMode()
   const endElement = searchKeyword ? (
     <CloseButton
       onClick={() => {
@@ -28,7 +32,7 @@ function App() {
     />
   ) : undefined
   
-  const chart = useChart<{ quantity: number; category: string }>({
+  const chart = useChart<{ quantity: number; category: string, color: string }>({
       data: getChartData(cartItems)
     })
 
@@ -60,11 +64,15 @@ function App() {
   return (
     <>
       <header>
-        <img src={viteLogo} alt="Vite logo" />
-        Store Sales Receipt Generator
+        <img src={viteLogo} alt="logo" />
+        <h1>MM Receipt Generator</h1>
+        <Text textStyle='xs' className='no-print'>Toggle Mode</Text>
+        <IconButton onClick={toggleColorMode} variant="outline" size="sm" className='no-print'>
+          {colorMode === 'light' ? <LuSun /> : <LuMoon />}
+        </IconButton>
       </header>
       <main>
-        <section id="items-section">
+        <section id="items-section" className='no-print'>
           <InputGroup endElement={endElement}>
             <Input
               ref={inputRef}
@@ -77,14 +85,21 @@ function App() {
           </InputGroup>
           <h2>Products</h2>
           {
-            loading && !error && 
-            <ProgressCircle.Root value={null} size="xl" className="spinner">
-              <ProgressCircle.Circle>
-                <ProgressCircle.Track />
-                <ProgressCircle.Range />
-              </ProgressCircle.Circle>
-            </ProgressCircle.Root>
-          }
+            loading && !error && (
+              <For each={[0,1,2,3,4,5,6,7,8,9,10,11]}>
+                {(item: number) => (
+                  <React.Fragment key={item}>
+                    <HStack gap="5">
+                      <Stack flex="1">
+                        <Skeleton height="5" width="40%" />
+                        <Skeleton height="5" width="80%"/>
+                      </Stack>
+                    </HStack>
+                    <br />
+                  </React.Fragment>
+                )}
+              </For>
+          )}
           {
             !loading && !error &&
             <Products data={products} selectionChange={updateItemInCart} selectedProducts={cartItems} />
@@ -111,7 +126,7 @@ function App() {
             <div className="cart-items">{renderCartItems(cartItems)}</div>
             <div className="cart-summary">{cartItems.length > 0 && renderCartSummary(cartItems)}</div>
             { cartItems.length > 0 && (
-            <HStack>
+            <HStack className='no-print'>
               <Button className='print-button' onClick={() => window.print()}>
                 <LuPrinter />
                 Print Receipt
@@ -126,7 +141,6 @@ function App() {
                 <YAxis
                   axisLine={false}
                   tickLine={false}
-                  // domain={[0, 10]}
                   tickFormatter={(value) => `${value}`}
                 />
                 <Bar isAnimationActive={true} dataKey={chart.key('quantity')}>
@@ -141,7 +155,9 @@ function App() {
           </div>
         </section>
       </main>
-      <footer id="footer">[FOOTER]</footer>
+      <footer id="footer">
+        &copy;{(new Date).getFullYear()} MM Receipt Generator
+      </footer>
     </>
   )
 
@@ -159,10 +175,18 @@ function App() {
     setCartItems([...cartItems])
   }
 
+  /**
+   * Adds the product to the cart items array.
+   * @param product The product to add to the cart.
+   */
   function addItemToCart(product: Product) {
     cartItems.push(product)
   }
 
+  /**
+   * Removes the product from the cart items array. 
+   * @param product The product to remove from the cart.
+   */
   function removeItemFromCart(product: Product) {
     const index = cartItems.findIndex(item => item.id === product.id)
     if (index !== -1) {
@@ -171,80 +195,9 @@ function App() {
   }
 } // end App()
 
-function renderCartItems(cartItems: Product[]) {
-  return cartItems.map((item) => (
-    <div key={item.id} className="cart-item">
-      <span className="cart-item__name">{item.name}</span>
-      <span className='cart-item__id'>{item.id}</span>
-      <span className='cart-item__category'>{item.category}</span>
-      <span className="cart-item__price">${item.price.toFixed(2)}</span>
-    </div>
-  ))
-}
-function renderCartSummary(cartItems: Product[]) {
-  const cart = new Cart(cartItems)
-  const subtotal = cart.getSubtotal().toFixed(2)
-  const taxTotals = cart.getTaxTotals()
-  const stateTaxTotal = taxTotals.state.toFixed(2)
-  const countyTaxTotal = taxTotals.county.toFixed(2)
-  const cityTaxTotal = taxTotals.city.toFixed(2)
-  const total = cart.getTotal().toFixed(2)
 
-  return (
-    <>
-      <div className="cart-subtotal">
-        <span>Subtotal: </span>
-        <span>${subtotal}</span>
-      </div>
-      <div className="cart-taxes">
-        <div className="cart-taxes__state">
-          <span>State tax (6.3%): </span>
-          <span>${stateTaxTotal}</span>
-        </div>
-        <div className="cart-taxes__county">
-          <span>County tax (0.7%): </span>
-          <span>${countyTaxTotal}</span>
-        </div>
-        <div className="cart-taxes__city">
-          <span>City tax (2.0%): </span>
-          <span>${cityTaxTotal}</span>
-        </div>
-      </div>
-      <div className="cart-total">
-        <span>Total due:</span>
-        <span>${total}</span>
-      </div>
-    </>
-  )
-}
 
-async function fetchProducts() {
-  try {
-    const response = await fetch(Config.API_URL)
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
-    const data = (await response.json()) as Product[]
-    return data
-  } catch (error) {
-    console.error('Failed to fetch products:', error)
-    throw error
-  }
-}
 
-function countItemsByCategory(products: Product[], category: string): number {
-  return products.filter(product => product.category === category).length
-}
 
-function getChartData(items: Product[]) {
-  return  [
-    { quantity: countItemsByCategory(items, 'g'), category: 'Grocery', color: 'red.solid' },
-    { quantity: countItemsByCategory(items, 'pf'), category: 'Prep. food', color: 'blue.solid' },
-    { quantity: countItemsByCategory(items, 'pd'), category: 'Presc. drug', color: 'green.solid' },
-    { quantity: countItemsByCategory(items, 'nd'), category: 'NP drug', color: 'yellow.solid' },
-    { quantity: countItemsByCategory(items, 'c'), category: 'Clothing', color: 'teal.solid' },
-    { quantity: countItemsByCategory(items, 'o'), category: 'Other', color: 'purple.solid' }
-  ]
-}
 
 export default App
