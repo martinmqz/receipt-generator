@@ -17,7 +17,7 @@ export default class Cart {
     }
   }
   private readonly TAX_RATE_STATE = 0.063 // Apply to all EXCEPT for g products
-  private readonly TAX_RATE_County = 0.007 // Apply to all EXCEPT for g products
+  private readonly TAX_RATE_COUNTY = 0.007 // Apply to all EXCEPT for g products
   private readonly TAX_RATE_CITY = 0.02 // Applyes to ALL products
   
   constructor(items: Product[] = []) {
@@ -69,7 +69,7 @@ export default class Cart {
     this.taxTotals.city += item.price * this.TAX_RATE_CITY // Applies to all
     if (item.category !== 'g') {
       this.taxTotals.state += item.price * this.TAX_RATE_STATE
-      this.taxTotals.county += item.price * this.TAX_RATE_County
+      this.taxTotals.county += item.price * this.TAX_RATE_COUNTY
     }
     // Update subtotal
     this.subtotal += item.price
