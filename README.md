@@ -50,3 +50,8 @@ Web app in TypeScript bundled with Vite, and componetized with Chakra-ui.
 npm i
 npm run dev
 ```
+
+## DEMO
+https://martinmqz.github.io/receipt-generator/
+![image](https://github.com/user-attachments/assets/7c29b7db-78c5-48af-9184-89b672390dec)
+
