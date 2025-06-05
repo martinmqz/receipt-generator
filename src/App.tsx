@@ -133,7 +133,7 @@ function App() {
             </HStack>
             )}
             { cartItems.length > 0 && (
-            <Chart.Root maxH="sm" chart={chart} className="chart-container">
+            <Chart.Root maxH="sm" chart={chart} className="chart-container no-print">
               <BarChart data={chart.data}>
                 <CartesianGrid stroke={chart.color('border.muted')} vertical={false} />
                 <XAxis axisLine={false} tickLine={false} dataKey={chart.key('category')} />
@@ -154,7 +154,7 @@ function App() {
           </div>
         </section>
       </main>
-      <footer id="footer">
+      <footer id="footer" className='no-print'>
         &copy;{(new Date).getFullYear()} MM Receipt Generator
       </footer>
     </>
