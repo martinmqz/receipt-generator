@@ -63,7 +63,7 @@ function App() {
   return (
     <>
       <header>
-        <img src='./vite.svg' alt="logo" width="50px" height="50px" loading="lazy" />
+        <img src='./vite.svg' alt="logo" width="50px" height="50px" />
         <h1>MM Receipt Generator</h1>
         <Text textStyle='xs' className='no-print'>Toggle Mode</Text>
         <IconButton onClick={toggleColorMode} variant="outline" size="sm" className='no-print' title='Toggle theme mode'>
