@@ -179,7 +179,6 @@ function App() {
     } else {
       removeItemFromCart(product)
     }
-    setCartItems([...cartItems])
   }
 
   /**
@@ -187,7 +186,7 @@ function App() {
    * @param product The product to add to the cart.
    */
   function addItemToCart(product: Product) {
-    cartItems.push(product)
+    setCartItems(prev => [...prev, product])
   }
 
   /**
@@ -195,10 +194,7 @@ function App() {
    * @param product The product to remove from the cart.
    */
   function removeItemFromCart(product: Product) {
-    const index = cartItems.findIndex(item => item.id === product.id)
-    if (index !== -1) {
-      cartItems.splice(index, 1)
-    }
+    setCartItems(prev => prev.filter(item => item.id !== product.id))
   }
 } // end App()
 
