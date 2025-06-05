@@ -72,17 +72,18 @@ function App() {
       </header>
       <main>
         <section id="items-section" className='no-print'>
-          <InputGroup endElement={endElement}>
+          <h2>Products</h2>
+          <InputGroup endElement={endElement} className="search-input-container">
             <Input
               ref={inputRef}
               placeholder="Search products"
               value={searchKeyword}
+              variant="subtle"
               onChange={(e) => {
                 setSearchKeyword(e.currentTarget.value)
               }}
             />
           </InputGroup>
-          <h2>Products</h2>
           {
             loading && !error && (
               <For each={[0,1,2,3,4,5,6,7,8,9,10,11]}>
