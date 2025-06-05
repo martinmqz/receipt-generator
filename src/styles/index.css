@@ -1,29 +1,31 @@
-
-/* :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
-  color: rgb(255 255 255 / 87%);
-  color-scheme: light dark;
-  background-color: #242424;
+:root {
+  --s-vertical-base: 1rem;
+  --s-vertical-sm: 0.5rem;
+  --s-vertical-xs: 0.25rem;
+  --s-vertical-xl: 2rem;
+  --s-vertical-3xl: 6rem;
+  --s-horizontal-base: 1rem;
+  --s-horizontal-sm: 0.5rem;
+  
+  /* Lets you specify whether or not the browser may synthesize some styles when the lacking in font-family */
   font-synthesis: none;
+  /* provides information to the rendering engine about what to optimize for when rendering text. */
   text-rendering: optimizelegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* controls the application of anti-aliasing when fonts are rendered. */
+ -webkit-font-smoothing: antialiased;
+ -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
-
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+#root {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "main main"
+    "footer footer";
+  grid-template-rows: auto 1fr auto;
+  gap: var(--s-vertical-xl);
+  max-width: 1280px;
+  height: 100dvh;
+  padding: var(--s-vertical-xl);
+  margin: 0 auto;
+}

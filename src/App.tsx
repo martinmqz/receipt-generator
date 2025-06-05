@@ -7,12 +7,12 @@ import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts'
 import { LuShoppingCart, LuPrinter, LuMoon, LuSun } from 'react-icons/lu'
 import { useColorMode } from './components/ui/color-mode'
 import Cache from './utils/cache'
-import './styles/App.css'
-import './styles/print.css'
 import fetchProducts from './utils/fetch-products'
 import renderCartItems from './utils/render-cart-items'
 import renderCartSummary from './utils/render-cart-summary'
 import getChartData from './utils/get-chart-data'
+import './styles/App.css'
+import './styles/print.css'
 
 function App() {
   const [loading, setLoading] = React.useState(true)
@@ -63,7 +63,7 @@ function App() {
   return (
     <>
       <header>
-        <img src='./vite.svg' alt="logo" width="50px" height="50px" />
+        <img src='./vite.svg' alt="logo" width="50px" height="50px" loading="lazy" />
         <h1>MM Receipt Generator</h1>
         <Text textStyle='xs' className='no-print'>Toggle Mode</Text>
         <IconButton onClick={toggleColorMode} variant="outline" size="sm" className='no-print' title='Toggle theme mode'>
@@ -103,6 +103,13 @@ function App() {
             !loading && !error &&
             <Products data={products} selectionChange={updateItemInCart} selectedProducts={cartItems} />
           }
+          {error && (
+            <VStack>
+              <Text color="red.500">Error loading products. Please try again later</Text>
+              <Button onClick={() => window.location.reload()}>Retry</Button>
+            </VStack>
+            /* Log error and send notification */
+          )}
         </section>
         <section id="receipt-section">
           <h2>Receipt</h2>
