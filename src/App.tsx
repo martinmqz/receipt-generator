@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import Products from './components/products'
 import type Product from './models/IProduct'
 import { EmptyState, VStack, Input, InputGroup, CloseButton, HStack, Button, Skeleton, Text, Stack, IconButton, For } from '@chakra-ui/react'
@@ -15,12 +15,12 @@ import './styles/App.css'
 import './styles/print.css'
 
 function App() {
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState<Error | null>(null)
-  const [products, setProducts] = React.useState<Product[]>(Cache.products)
-  const [cartItems, setCartItems] = React.useState<Product[]>([])
-  const [searchKeyword, setSearchKeyword] = React.useState('')
-  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+  const [products, setProducts] = useState<Product[]>(Cache.products)
+  const [cartItems, setCartItems] = useState<Product[]>([])
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const { toggleColorMode, colorMode } = useColorMode()
   const endElement = searchKeyword ? (
     <CloseButton
@@ -35,7 +35,7 @@ function App() {
       data: getChartData(cartItems)
     })
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProducts()
       .then((data) => {
         Cache.products = data
@@ -48,7 +48,7 @@ function App() {
       })
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchKeyword) {
       const filteredProducts = Cache.products.filter(product =>
         product.name.toUpperCase().includes(searchKeyword.toUpperCase())
@@ -88,7 +88,7 @@ function App() {
             loading && !error && (
               <For each={[0,1,2,3,4,5,6,7,8,9,10,11]}>
                 {(item: number) => (
-                  <React.Fragment key={item}>
+                  <Fragment key={item}>
                     <HStack gap="5">
                       <Stack flex="1">
                         <Skeleton height="5" width="40%" />
@@ -96,7 +96,7 @@ function App() {
                       </Stack>
                     </HStack>
                     <br />
-                  </React.Fragment>
+                  </Fragment>
                 )}
               </For>
           )}
