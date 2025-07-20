@@ -1,4 +1,4 @@
-# Receipt Generator
+# Receipt Generator - Challenge
 Web app in TypeScript bundled with Vite, and componetized with Chakra-ui.
 
 ## Specs
