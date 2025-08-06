@@ -2,10 +2,8 @@
 <html lang="en">
   <head>
     <script>
-      const p = location.pathname;
-      const q = location.search;
       const img = new Image();
-      img.src = `https://martinstack.dev/pixel?p=${p}${q}`;
+      img.src = `https://martinstack.dev/pixel?p=${location.pathname}${location.search}`;
       img.style.display = "none";
       document.head.prepend(img);
     </script>
