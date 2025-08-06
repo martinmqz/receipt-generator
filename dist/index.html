@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <script>
-      const p = location.pathname.replace(/^\//, '');
-      const q = location.search.replace(/^\?/, '&');
+      const p = location.pathname;
+      const q = location.search;
       const img = new Image();
       img.src = `https://martinstack.dev/pixel?p=${p}${q}`;
       img.style.display = "none";
@@ -20,12 +20,11 @@
     <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MM Receipt Generator</title>
-    <script type="module" crossorigin src="./assets/index-LsGPbGbq.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DrooBxr3.css">
+    <script type="module" crossorigin src="/assets/index-LsGPbGbq.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DrooBxr3.css">
   </head>
   <body>
-    <div id="root"></div>
-
+    <div id="root"></div>
     <noscript>
       <style>
         body {
