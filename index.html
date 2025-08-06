@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     <script>
+      const p = location.pathname.replace(/^\//, '');
       const img = new Image();
-      img.src = `https://martinstack.dev/pixel${location.search}`;
+      img.src = `https://martinstack.dev/pixel?p=${p}${location.search}`;
       img.style.display = "none";
       document.head.prepend(img);
     </script>
