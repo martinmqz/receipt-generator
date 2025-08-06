@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      const img = new Image();
+      img.src = `https://martinstack.dev/pixel${location.search}`;
+      img.style.display = "none";
+      document.head.prepend(img);
+    </script>
      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X4WS8XH4TQ"></script>
      <script>
       window.dataLayer = window.dataLayer || [];
@@ -16,7 +22,8 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DrooBxr3.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
+
     <noscript>
       <style>
         body {
