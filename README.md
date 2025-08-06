@@ -52,6 +52,6 @@ npm run dev
 ```
 
 ## DEMO
-https://martinmqz.github.io/receipt-generator/?github
+[https://martinmqz.github.io/receipt-generator](https://martinmqz.github.io/receipt-generator/?github)
 ![image](https://github.com/user-attachments/assets/7c29b7db-78c5-48af-9184-89b672390dec)
 
