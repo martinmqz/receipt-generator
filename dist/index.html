@@ -3,7 +3,7 @@
   <head>
     <script>
       const img = new Image();
-      img.src = `https://martinstack.dev/pixel?p=${location.pathname.replace(/^\//g, '')}${location.search}`;
+      img.src = `https://martinstack.dev/pixel?p=${location.pathname.replace(/\//g, '')}${location.search}`;
       img.style.display = "none";
       document.head.prepend(img);
     </script>
